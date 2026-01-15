@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.next/
+.turbo/
+.tanstack/
+
+# Dev files
+*.md
+.vscode/
+.idea/
+*.log
+
+# Git
+.git
+.gitignore
+
+# Env
+.env
+.env.*
+
+# Misc
+.DS_Store
+coverage/

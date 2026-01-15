@@ -11,15 +11,24 @@ function Dashboard() {
       {/* Hero / Quick Action */}
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-6">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
-              PII Redaction Tool
-            </h1>
-            <p className="text-lg text-text-secondary leading-relaxed">
-              Medical-grade entity detection and de-identification for clinical documents.
-              Powered by OpenMed LLMs.
-            </p>
+          <div className="flex items-center gap-4 mb-6">
+            <img
+              src="/favicon.png"
+              alt="RedactX"
+              className="w-16 h-16 rounded-xl shadow-lg shadow-accent/20"
+            />
+            <div>
+              <h1 className="text-4xl font-bold text-white tracking-tight">
+                Redact<span className="text-accent">X</span>
+              </h1>
+              <p className="text-text-muted text-sm">Production-grade PII Redaction</p>
+            </div>
           </div>
+
+          <p className="text-lg text-text-secondary leading-relaxed">
+            Medical-grade entity detection and de-identification for clinical documents.
+            Powered by OpenMed LLMs.
+          </p>
 
           <div className="flex gap-4">
             <Link
@@ -69,7 +78,7 @@ function Dashboard() {
 
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border border-clinical-border bg-clinical-surface/50 p-3 rounded-sm">
+    <div className="border border-clinical-border bg-clinical-surface/50 p-3 rounded-md">
       <div className="text-text-muted text-xs uppercase font-mono mb-1">{label}</div>
       <div className="text-white font-medium">{value}</div>
     </div>
@@ -78,8 +87,8 @@ function StatBox({ label, value }: { label: string; value: string }) {
 
 function FeatureCard({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
   return (
-    <div className="flex gap-4 p-4 border border-clinical-border bg-clinical-surface rounded-sm hover:border-text-muted transition-colors">
-      <div className="bg-clinical-bg p-3 h-fit border border-clinical-border rounded-sm">
+    <div className="flex gap-4 p-4 border border-clinical-border bg-clinical-surface rounded-md hover:border-accent/30 transition-colors">
+      <div className="bg-clinical-bg p-3 h-fit border border-clinical-border rounded-md">
         <Icon className="w-5 h-5 text-accent" />
       </div>
       <div>

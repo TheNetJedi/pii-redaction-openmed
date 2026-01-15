@@ -27,11 +27,6 @@ RUN pip install --no-cache-dir -r /tmp/api/requirements.txt
 # Production stage
 FROM python:3.11-slim
 
-# Install runtime dependencies (OpenMP for PyTorch)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
-
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash redactx
 
@@ -59,7 +54,7 @@ ENV REDACTX_PORT=8000
 ENV REDACTX_MODEL_CACHE_DIR=/tmp/redactx/models
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-# Ensure core is strictly accessible
+# Ensure core is accessible
 ENV PYTHONPATH="/app/core:${PYTHONPATH}"
 
 # Expose port
