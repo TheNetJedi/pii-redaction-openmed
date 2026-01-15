@@ -1,0 +1,32 @@
+# RedactX - Development Docker Compose
+# Use: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      - REDACTX_DEBUG=true
+      - REDACTX_LOG_LEVEL=debug
+      - REDACTX_CORS_ORIGINS=*
+    volumes:
+      # Mount source code for hot reload
+      - ./api:/app/api
+      - ./core:/app/core
+    # Re-install core in editable mode on startup if needed, but the image has it installed.
+    # Since we mount ./core over /app/core, and PYTHONPATH includes /app/core (via Dockerfile), 
+    # changes in ./core will be reflected if python reloads.
+    # Uvicorn reload defaults to watching only the working directory (/app/api).
+    # We need to tell uvicorn to watch ../core too.
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/api --reload-dir /app/core
+
+  web:
+    build:
+      target: builder
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    command: bun run dev --host 0.0.0.0

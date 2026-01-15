@@ -1,0 +1,46 @@
+# RedactX - Production-grade PII Redaction
+# Docker Compose for full stack deployment
+
+services:
+  # API Backend
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDACTX_HOST=0.0.0.0
+      - REDACTX_PORT=8000
+      - REDACTX_LOG_LEVEL=info
+      - REDACTX_DEFAULT_MODEL=openmed/OpenMed-PII-ClinicalE5-Small-33M-v1
+      - REDACTX_DEVICE=auto
+      - REDACTX_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+    volumes:
+      # Cache models across restarts
+      - model-cache:/tmp/redactx/models
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health').raise_for_status()" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # Web Frontend
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8000
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  model-cache:
+    driver: local
